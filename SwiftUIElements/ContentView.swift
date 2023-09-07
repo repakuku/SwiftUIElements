@@ -8,19 +8,77 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var sliderValue = Double.random(in: 0...255)
+    @State private var userName = ""
+    @State private var displayedName = ""
+    @State private var alertPresented = false
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        VStack(spacing: 40) {
+            Text("\(lround(sliderValue))")
+                .font(.largeTitle)
+            UserNameView(name: displayedName)
+            ColorSliderView(value: $sliderValue)
+            TextField("Enter your name", text: $userName)
+                .textFieldStyle(.roundedBorder)
+            
+            Text("Welcome to SwiftUI")
+                .font(.system(size: 60))
+                .bold()
+                .foregroundColor(.red)
+                .padding()
+                .background(.blue)
+                .cornerRadius(20)
+            
+            Spacer()
+            Button("Done", action: checkUserName)
+                .alert("Wrong Format", isPresented: $alertPresented, actions: {}) {
+                    Text("Enter your name")
+                }
+
         }
         .padding()
+    }
+    
+    private func checkUserName() {
+        if let _ = Double(userName) {
+            userName = ""
+            alertPresented.toggle()
+            return
+        }
+        displayedName = userName
+        userName = ""
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+    }
+}
+
+struct ColorSliderView: View {
+    @Binding var value: Double
+    
+    var body: some View {
+        HStack {
+            Text("0").foregroundColor(.red)
+            Slider(value: $value, in: 0...255, step: 1)
+            Text("255").foregroundColor(.red)
+        }
+    }
+}
+
+struct UserNameView: View {
+    let name: String
+    var body: some View {
+        HStack {
+            HStack(alignment: .firstTextBaseline) {
+                Text("USER NAME: ").frame(height: 60)
+                Text(name)
+                    .font(.largeTitle)
+            }
+            Spacer()
+        }
     }
 }
