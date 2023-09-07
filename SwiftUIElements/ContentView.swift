@@ -14,29 +14,32 @@ struct ContentView: View {
     @State private var alertPresented = false
     
     var body: some View {
-        VStack(spacing: 40) {
-            Text("\(lround(sliderValue))")
-                .font(.largeTitle)
-            UserNameView(name: displayedName)
-            ColorSliderView(value: $sliderValue)
-            TextField("Enter your name", text: $userName)
-                .bordered()
-            Text("Welcome to SwiftUI")
-                .font(.system(size: 60))
-                .bold()
-                .foregroundColor(.red)
-                .padding()
-                .background(.blue)
-                .cornerRadius(20)
-            
-            Spacer()
-            Button("Done", action: checkUserName)
-                .alert("Wrong Format", isPresented: $alertPresented, actions: {}) {
-                    Text("Enter your name")
-                }
-
+        ZStack {
+            Color(red: 0.95, green: 0.95, blue: 0.95)
+                .ignoresSafeArea()
+            VStack(spacing: 40) {
+                Text("\(lround(sliderValue))")
+                    .font(.largeTitle)
+                UserNameView(name: displayedName)
+                ColorSliderView(value: $sliderValue)
+                TextField("Enter your name", text: $userName)
+                    .bordered()
+                Text("Welcome to SwiftUI")
+                    .font(.system(size: 60))
+                    .bold()
+                    .foregroundColor(.red)
+                    .padding()
+                    .background(.blue)
+                    .cornerRadius(20)
+                
+                Spacer()
+                Button("Done", action: checkUserName)
+                    .alert("Wrong Format", isPresented: $alertPresented, actions: {}) {
+                        Text("Enter your name")
+                    }
+            }
+            .padding()
         }
-        .padding()
     }
     
     private func checkUserName() {
